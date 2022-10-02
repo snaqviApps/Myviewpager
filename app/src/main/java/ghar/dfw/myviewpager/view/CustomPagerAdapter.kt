@@ -1,75 +1,50 @@
-package ghar.dfw.myviewpager.view;
+package ghar.dfw.myviewpager.view
 
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.Context
+import android.util.Log
+import ghar.dfw.myviewpager.data.DataModel
+import androidx.viewpager.widget.PagerAdapter
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import ghar.dfw.myviewpager.R
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.PagerAdapter;
+internal class CustomPagerAdapter(context: Context, private val itemList: List<DataModel>) : PagerAdapter() {
 
-import java.util.List;
+  private val layoutInflater: LayoutInflater
+  init {
+    layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+  }
 
-import ghar.dfw.myviewpager.R;
-import ghar.dfw.myviewpager.data.DataModel;
+  override fun getCount(): Int {
+    return itemList.size
+  }
 
-class CustomPagerAdapter extends PagerAdapter {
+  override fun isViewFromObject(view: View, `object`: Any): Boolean {
+    return view === `object`
+  }
 
-   private Context context;
+  override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
-   public CustomPagerAdapter(Context context, List<DataModel> itemList) {
-      this.context = context;
-      this.itemList = itemList;
-      this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-   }
+    Log.v("instantiateCall-position", position.toString())
+    val itemView = layoutInflater.inflate(R.layout.viewpager_item, container, false)
+    val imageView = itemView.findViewById<ImageView>(R.id.imageItem)
+    val textView = itemView.findViewById<TextView>(R.id.imageItemText)
+    val dataModel = itemList[position]
+    imageView.setImageResource(dataModel.imageId)
+    textView.text = dataModel.title
+    container.addView(itemView)
 
-   private final List<DataModel> itemList;
-   private final LayoutInflater layoutInflater;
+    return itemView
+  }
 
+  override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
-   @Override
-   public int getCount() {
-      return itemList.size();
-   }
+    Log.v("destroyCall", "destroyItem-call-position: $position")
+    container.removeView(`object` as ConstraintLayout)
+  }
 
-   @Override
-   public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-      //compares if the View is the Page View
-      return view == object;
-   }
-
-   @NonNull
-   @Override
-   public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
-      Log.v("instantiateCall-position", String.valueOf(position));
-      // Get the view of the single view Pager Item
-      View itemView = layoutInflater.inflate(R.layout.viewpager_item, container, false);
-      ImageView imageView = itemView.findViewById(R.id.imageItem);
-      TextView textView = itemView.findViewById(R.id.imageItemText);
-
-      // Get the Data Model of the current Position
-      DataModel dataModel = itemList.get(position);
-      imageView.setImageResource(dataModel.getImageId());
-      textView.setText(dataModel.getTitle());
-
-      // adding viewpager_Item.xml to View Pager
-      container.addView(itemView);
-
-      // return super.instantiateItem(container, position);
-      return itemView;              // return the view of viewPager-Item
-   }
-
-   @Override
-   public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-      Log.v("destroyCall", "destroyItem-call-position: " + position);
-
-      // destroy items here to free-momory
-      container.removeView((ConstraintLayout) object);
-//      super.destroyItem(container, position, object);
-   }
 }

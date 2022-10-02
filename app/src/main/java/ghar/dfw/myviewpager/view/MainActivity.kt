@@ -32,15 +32,11 @@ class MainActivity : AppCompatActivity() {
       R.drawable.image06
     )
 
-    val titles: List<String> =
-      listOf("Image01", "Image02", "Image03", "Image05", "Image06", "eagle")
-
+    val titles: List<String> = listOf("Image01", "Image02", "Image03", "Image05", "Image06", "eagle")
     for (i in imageIds.indices) {
       listItem.add(DataModel(imageIds[i], titles[i]))
     }
-
     return listItem
-
   }
 
 }
