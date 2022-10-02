@@ -2,8 +2,12 @@ package ghar.dfw.myviewpager.data
 
 class DataModel() {
 
-  val imageId: Int = 0
-  val title : String = ""
-  constructor(imageId: Int, title : String) : this()
+  var imageId: Int = 0
+  var title : String = ""
+  constructor(imageId: Int, title : String) : this(){
+    this.imageId = imageId
+    this.title = title
+
+  }
 
 }
